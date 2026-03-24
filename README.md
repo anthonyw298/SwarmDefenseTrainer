@@ -168,7 +168,8 @@ This is the object the player defends. Drones fly toward it. **Required — the 
    - You can type the numbers directly into the X, Y, Z fields
 6. Still in the Details panel, scroll down to find **Mesh Component** (or click on `MeshComponent` in the Components list at the top of Details). Look for **Static Mesh**:
    - Click the dropdown next to **Static Mesh** (it may say "None")
-   - In the search box that appears, type **Cube**
+   - **Important:** If the search results are empty, you need to enable engine content. Click the **settings/gear icon** (or **eye icon**) in the asset picker and check **"Show Engine Content"**. The basic shapes (Cube, Sphere, etc.) are engine assets and are hidden by default
+   - In the search box that appears, type **Cube** (you may also see it listed as `Shape_Cube` or `SM_Cube`)
    - Select **Cube** from the results. The HVA should now appear as a white cube in the viewport
 7. To make it bigger: in the **Transform** section, find **Scale** and set it to: `X = 3`, `Y = 3`, `Z = 3`
 8. (Optional) To give it color: in the Details panel, find **Materials** under the mesh component, click the dropdown next to **Element 0**, and pick any material (e.g., search for `Basic` or `M_Basic`)
@@ -266,10 +267,11 @@ By default, drones have collision (you can hit them with hitscan) but no visible
 7. In the **Components panel** on the left, click on **DroneMesh** to select it
 8. In the **Details panel** on the right, find the property called **Static Mesh**:
    - Click the dropdown next to **Static Mesh** (it says "None")
-   - In the search box, type: **Sphere**
+   - **Important:** If the search results are empty, click the **settings/gear icon** (or **eye icon**) in the asset picker and check **"Show Engine Content"** — the basic shapes are engine assets hidden by default
+   - In the search box, type: **Sphere** (you may also see it as `Shape_Sphere` or `SM_Sphere`)
    - Select **Sphere** from the results
    - The drone should now appear as a white sphere in the Blueprint viewport
-   - (You could also use `Cube` or `Cone` or any mesh you want)
+   - (You could also use `Cube`, `Cone`, or any mesh you want)
 9. (Optional) Adjust the size: in the Details panel under **Transform > Scale**, set `X = 0.5`, `Y = 0.5`, `Z = 0.5` for a smaller drone
 10. (Optional) Add color: under **Materials** in the Details panel, click the dropdown next to **Element 0** and pick a material
 11. In the top-left of the Blueprint editor, click **Compile** (blue button with a checkmark). You should see "Compile Successful" in green
