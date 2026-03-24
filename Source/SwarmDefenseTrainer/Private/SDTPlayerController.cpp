@@ -8,6 +8,7 @@
 #include "VN100BlueprintLibrary.h"
 #include "TriggerBlueprintLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/InputSettings.h"
 
 ASDTPlayerController::ASDTPlayerController()
 {
@@ -45,6 +46,8 @@ void ASDTPlayerController::BeginPlay()
     bShowMouseCursor = false;
     FInputModeGameOnly InputMode;
     SetInputMode(InputMode);
+
+    UE_LOG(LogTemp, Warning, TEXT("SDT: PlayerController BeginPlay — using GetInputAnalogKeyState for mouse input (v2)"));
 }
 
 void ASDTPlayerController::SetupInputComponent()
@@ -91,13 +94,11 @@ void ASDTPlayerController::Tick(float DeltaTime)
 
 void ASDTPlayerController::HandleMockInput(float DeltaTime)
 {
-    // Read mouse delta directly — bypasses the input binding system entirely.
-    // UE 5.7 defaults to Enhanced Input which silently ignores legacy AxisMappings
-    // for mouse axes. GetInputMouseDelta() reads raw hardware mouse movement
-    // regardless of which input system is active.
-    float MouseX = 0.f;
-    float MouseY = 0.f;
-    GetInputMouseDelta(MouseX, MouseY);
+    // Read mouse axes using GetInputAnalogKeyState — the most low-level
+    // input API in UE5. This bypasses both Enhanced Input and legacy
+    // AxisMapping systems, reading directly from the hardware input state.
+    float MouseX = GetInputAnalogKeyState(EKeys::MouseX);
+    float MouseY = GetInputAnalogKeyState(EKeys::MouseY);
 
     if (FMath::Abs(MouseX) > 0.01f)
     {
