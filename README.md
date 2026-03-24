@@ -1,6 +1,6 @@
 # Swarm Defense Trainer (SDT)
 
-Counter-UAS training system built with Unreal Engine 5.7. The player defends a High Value Asset against incoming drone swarms using a first-person hitscan weapon. Supports both standard mouse/keyboard input and custom hardware (VN-100 IMU orientation sensor + Arduino trigger button).
+Counter-UAS training system built with Unreal Engine 5.7.4+. The player defends a High Value Asset against incoming drone swarms using a first-person hitscan weapon. Supports both standard mouse/keyboard input and custom hardware (VN-100 IMU orientation sensor + Arduino trigger button).
 
 ## Overview
 
@@ -73,23 +73,36 @@ You do NOT need any hardware to develop and test. The game runs fully in mock mo
 
 ### Phase 1: Get UE5 Ready
 
-**Step 1 -- Install Unreal Engine 5.7**
+**Step 1 -- Install Unreal Engine 5.7.4+**
 
 1. Download and install the [Epic Games Launcher](https://www.unrealengine.com/download)
 2. Open the launcher, go to the **Unreal Engine** tab
 3. Click **Library** in the left sidebar
 4. Click the **+** button next to "Engine Versions"
-5. Select version **5.7.x** and click **Install**
+5. Select version **5.7.x** (5.7.4 or newer) and click **Install**
 6. Make sure you have at least **50 GB free disk space**
 7. Wait for the install to complete (this can take 30-60 minutes)
 
 **Step 2 -- Install a C++ Compiler**
 
-*Windows:*
+*Windows (Visual Studio 2022):*
 1. Download [Visual Studio 2022 Community](https://visualstudio.microsoft.com/) (free)
 2. During installation, check the **"Game development with C++"** workload
-3. Also check **"Desktop development with C++"** under Individual Components if not auto-selected
-4. Complete the install
+3. Also check **"Desktop development with C++"** workload
+4. Complete the install and restart your PC
+
+*Windows (Visual Studio 2026):*
+1. Download [Visual Studio 2026 Community](https://visualstudio.microsoft.com/) (free)
+2. During installation, check the **"Game development with C++"** workload
+3. Also check **"Desktop development with C++"** workload
+4. **Important — UE 5.7.4 requires the MSVC v143 toolset.** VS 2026 ships with MSVC v144 by default, which UE's build tool (UnrealBuildTool) may not yet recognize. To fix this:
+   - Open the **Visual Studio Installer** (search for it in the Start menu)
+   - Click **Modify** next to your VS 2026 install
+   - Go to the **Individual Components** tab
+   - Search for **MSVC v143**
+   - Check the box for **MSVC v143 - VS 2022 C++ x64/x86 build tools**
+   - Click **Modify** to install
+5. Complete the install and restart your PC
 
 *Mac:*
 1. Install Xcode from the Mac App Store
@@ -102,7 +115,9 @@ You do NOT need any hardware to develop and test. The game runs fully in mock mo
    git clone https://github.com/anthonyw298/SwarmDefenseTrainer.git
    ```
 2. Double-click `SwarmDefenseTrainer.uproject`
-3. If prompted to select an engine version, choose **5.7**
+   - If Windows asks which application to use, right-click the file instead > **Open with** > browse to your UE install (e.g., `C:\Program Files\Epic Games\UE_5.7\Engine\Binaries\Win64\UnrealEditor.exe`) and check "Always use this app"
+   - Alternatively, open the project through the **Epic Games Launcher** > Unreal Engine tab > Library > Browse
+3. If prompted with **"Target Upgrade Required"**, click **Yes/Update** to convert the project to your engine version
 4. UE5 will ask: *"Would you like to rebuild the missing modules?"* -- Click **Yes**
 5. Wait for compilation (first time takes 2-5 minutes depending on your machine)
 6. The UE5 editor opens with an empty/default viewport
@@ -424,8 +439,50 @@ SwarmDefenseTrainer/
         SDTDefaultSounds.h       # Procedural sound generator
       Private/
         (corresponding .cpp files)
-  SwarmDefenseTrainer.uproject   # UE5 project file (engine 5.7)
+  SwarmDefenseTrainer.uproject   # UE5 project file (engine 5.7.4+)
 ```
+
+---
+
+## Troubleshooting
+
+### "Could not be compiled. Try rebuilding from source manually."
+
+This error appears when UE cannot compile the project's C++ code. Common causes:
+
+1. **No C++ compiler installed.** You need Visual Studio 2022 or 2026 (the full IDE), NOT Visual Studio Code. Install with the "Game development with C++" and "Desktop development with C++" workloads. See Step 2.
+
+2. **Using VS 2026 without the MSVC v143 toolset.** UE 5.7.4's UnrealBuildTool may not recognize the MSVC v144 toolchain that ships with VS 2026. Install the MSVC v143 toolset as an Individual Component in the VS Installer. See Step 2 (VS 2026 instructions).
+
+3. **Missing .NET SDK.** UnrealBuildTool is a C# application. If it fails silently (no log file generated in `Saved/Logs/`), you may need to install the [.NET 6.0 SDK](https://dotnet.microsoft.com/download/dotnet/6.0).
+
+### ".uproject asks which application to open with"
+
+Unreal Engine is not registered as the handler for `.uproject` files. Either:
+- Right-click > Open with > browse to `UnrealEditor.exe` in your engine install
+- Open through the Epic Games Launcher > Library > Browse to project
+
+### "Target Upgrade Required"
+
+Normal when first opening the project on a different UE patch version. Click **Yes/Update** to let the engine convert the project files.
+
+### Build log location
+
+If compilation fails, check `SwarmDefenseTrainer/Saved/Logs/SwarmDefenseTrainer.log` for detailed error messages. If this file does not exist or was not updated, the failure occurred before the engine loaded the project (likely a UBT or compiler toolchain issue — see items 1-3 above).
+
+---
+
+## Compatibility
+
+| Component | Tested / Supported |
+|-----------|-------------------|
+| Unreal Engine | 5.7.4+ (uses `BuildSettingsVersion.Latest` and `EngineIncludeOrderVersion.Latest` for forward compatibility) |
+| Visual Studio | 2022 (MSVC v143), 2026 (requires MSVC v143 toolset installed as Individual Component) |
+| Xcode | 15+ (macOS) |
+| Windows | 10/11 |
+| macOS | Ventura+ |
+
+The project uses `.Latest` enum values in its Target.cs build files rather than hardcoded version-specific values (e.g., `BuildSettingsVersion.V5`), ensuring forward compatibility with future UE 5.7.x patch releases and beyond.
 
 ---
 
