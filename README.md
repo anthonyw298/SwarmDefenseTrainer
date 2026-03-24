@@ -50,8 +50,8 @@ PreGame (title screen) -> Countdown (3-2-1) -> Playing (6 waves) -> GameOver (vi
 
 | Software | Version | Download | Why |
 |----------|---------|----------|-----|
-| Unreal Engine | **5.7** | [Epic Games Launcher](https://www.unrealengine.com/download) | Game engine. Install via the Epic Games Launcher > Unreal Engine tab > Library > + button > 5.7. |
-| Visual Studio | **2022** (Windows) | [visualstudio.microsoft.com](https://visualstudio.microsoft.com/) | C++ compiler for UE5. During install, select the **"Game development with C++"** workload. |
+| Unreal Engine | **5.7.4+** | [Epic Games Launcher](https://www.unrealengine.com/download) | Game engine. Install via the Epic Games Launcher > Unreal Engine tab > Library > + button > 5.7. |
+| Visual Studio | **2022 or 2026** (Windows) | [visualstudio.microsoft.com](https://visualstudio.microsoft.com/) | C++ compiler for UE5. During install, select the **"Game development with C++"** and **"Desktop development with C++"** workloads. If using VS 2026, also install the **MSVC v143** toolset via Individual Components to ensure UBT compatibility. |
 | Xcode | **15+** (Mac only) | Mac App Store | C++ compiler for UE5 on macOS. |
 | Arduino IDE | **2.0+** | [arduino.cc/en/software](https://www.arduino.cc/en/software) | For uploading the trigger button sketch to the Arduino. Only needed when integrating hardware. |
 

@@ -6,6 +6,7 @@
 
 class ASDTGameMode;
 class ASDTHighValueAsset;
+class UFont;
 
 /**
  * Canvas-based HUD — draws all game screens directly on the canvas.

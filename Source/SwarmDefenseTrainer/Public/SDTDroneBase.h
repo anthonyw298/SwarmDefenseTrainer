@@ -4,6 +4,8 @@
 #include "GameFramework/Actor.h"
 #include "SDTDroneBase.generated.h"
 
+class UAudioComponent;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDroneKilled, ASDTDroneBase*, Drone);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDroneReachedTarget, ASDTDroneBase*, Drone);
 
