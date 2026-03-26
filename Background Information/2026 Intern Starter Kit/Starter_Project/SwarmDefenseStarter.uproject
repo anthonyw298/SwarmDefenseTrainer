@@ -1,0 +1,26 @@
+{
+    "FileVersion": 3,
+    "EngineAssociation": "",
+    "Category": "",
+    "Description": "Swarm Defense Trainer — Intern Starter Project",
+    "Modules": [
+        {
+            "Name": "SwarmDefenseStarter",
+            "Type": "Runtime",
+            "LoadingPhase": "Default",
+            "AdditionalDependencies": [
+                "Engine"
+            ]
+        }
+    ],
+    "Plugins": [
+        {
+            "Name": "VN100Input",
+            "Enabled": true
+        },
+        {
+            "Name": "HardwareTrigger",
+            "Enabled": true
+        }
+    ]
+}
