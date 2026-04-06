@@ -15,6 +15,7 @@ This starter kit contains everything your team needs to begin developing the Cou
 | `03_Blueprint_Tutorials/` | Step-by-step tutorials for using the provided plugins in UE5 Blueprints |
 | `04_Plugin_API_Reference.md` | Complete API reference for the VN100Input and HardwareTrigger plugins |
 | `05_Trade_Study_Template.md` | Template for conducting trade study analyses |
+| `06_Collaboration_Guide.md` | **Read first.** Git + LFS setup, Blueprint ownership rules, weekly workflow, and conflict resolution |
 
 ### Starter Project (`Starter_Project/`)
 
