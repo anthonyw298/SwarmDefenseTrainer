@@ -6,8 +6,10 @@
 #include "SDTGameInstance.h"
 #include "SDTScoreManager.h"
 #include "VN100BlueprintLibrary.h"
-#include "TriggerBlueprintLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/InputSettings.h"
+#include "Engine/LocalPlayer.h"
+#include "Engine/GameViewportClient.h"
 
 ASDTPlayerController::ASDTPlayerController()
 {
@@ -45,6 +47,19 @@ void ASDTPlayerController::BeginPlay()
     bShowMouseCursor = false;
     FInputModeGameOnly InputMode;
     SetInputMode(InputMode);
+
+    // FInputModeGameOnly overrides our DefaultInput.ini settings, changing
+    // LockAlways -> LockOnCapture. Re-apply LockAlways so the mouse is
+    // captured immediately in PIE without needing a click first.
+    // Note: SetCaptureMouseOnClick was removed in UE 5.7.4, but
+    // SetMouseLockMode still exists on UGameViewportClient.
+    ULocalPlayer* LP = GetLocalPlayer();
+    if (LP && LP->ViewportClient)
+    {
+        LP->ViewportClient->SetMouseLockMode(EMouseLockMode::LockAlways);
+    }
+
+    UE_LOG(LogTemp, Warning, TEXT("SDT: PlayerController BeginPlay — mouse LockAlways applied, using GetInputMouseDelta (v7)"));
 }
 
 void ASDTPlayerController::SetupInputComponent()
@@ -91,14 +106,20 @@ void ASDTPlayerController::Tick(float DeltaTime)
 
 void ASDTPlayerController::HandleMockInput(float DeltaTime)
 {
-    // Standard mouse look — apply cached axis values with sensitivity
-    if (FMath::Abs(TurnInput) > 0.01f)
+    // Use APlayerController::GetInputMouseDelta — reads mouse delta
+    // directly from the viewport, bypassing the PlayerInput class.
+    // Works regardless of whether Enhanced or Legacy input is active.
+    float MouseDeltaX = 0.f;
+    float MouseDeltaY = 0.f;
+    GetInputMouseDelta(MouseDeltaX, MouseDeltaY);
+
+    if (FMath::Abs(MouseDeltaX) > 0.01f)
     {
-        AddYawInput(TurnInput * YawSensitivity);
+        AddYawInput(MouseDeltaX * YawSensitivity);
     }
-    if (FMath::Abs(LookUpInput) > 0.01f)
+    if (FMath::Abs(MouseDeltaY) > 0.01f)
     {
-        AddPitchInput(LookUpInput * PitchSensitivity);
+        AddPitchInput(-MouseDeltaY * PitchSensitivity);
     }
 }
 
@@ -134,22 +155,8 @@ void ASDTPlayerController::HandleHardwareInput(float DeltaTime)
 
 void ASDTPlayerController::HandleFireInput()
 {
-    bool bShouldFire = false;
-
-    switch (CurrentInputMode)
-    {
-    case ESDTInputMode::MockInput:
-        bShouldFire = bFireHeld;
-        break;
-    case ESDTInputMode::HardwareInput:
-        // Check both hardware trigger AND mouse click (allow mouse as fallback)
-        // Use ConsumeTriggerPress() so the flag clears after each read,
-        // preventing a single press from firing indefinitely.
-        bShouldFire = UTriggerBlueprintLibrary::ConsumeTriggerPress() || bFireHeld;
-        break;
-    }
-
-    if (bShouldFire)
+    // Mouse left-click fires in both Mock and Hardware modes
+    if (bFireHeld)
     {
         ASDTCharacter* SDTChar = Cast<ASDTCharacter>(GetPawn());
         if (SDTChar && SDTChar->WeaponComponent)

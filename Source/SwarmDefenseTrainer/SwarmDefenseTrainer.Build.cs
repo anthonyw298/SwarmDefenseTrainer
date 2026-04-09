@@ -11,11 +11,8 @@ public class SwarmDefenseTrainer : ModuleRules
             "CoreUObject",
             "Engine",
             "InputCore",
-            "UMG",
-            "Slate",
-            "SlateCore",
-            "VN100Input",
-            "HardwareTrigger"
+            "DeveloperSettings",
+            "VN100Input"
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] { });

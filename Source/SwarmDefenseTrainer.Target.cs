@@ -6,8 +6,8 @@ public class SwarmDefenseTrainerTarget : TargetRules
     public SwarmDefenseTrainerTarget(TargetInfo Target) : base(Target)
     {
         Type = TargetType.Game;
-        DefaultBuildSettings = BuildSettingsVersion.V4;
-        IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_4;
+        DefaultBuildSettings = BuildSettingsVersion.Latest;
+        IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
         ExtraModuleNames.Add("SwarmDefenseTrainer");
     }
 }
